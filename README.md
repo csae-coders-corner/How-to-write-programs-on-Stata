@@ -26,39 +26,39 @@ program define our_program
 
 Also, let’s say we want to be able to ‘modify’ excel file in some cases and `replace’ it in other cases. We’ll allow for this flexibility by including an argument labelled condition. 
 
-args Pop Filename Sheet Heading Note j
+`args Pop Filename Sheet Heading Note j`
 
 The order in which the arguments are listed doesn’t matter except that you will have to ensure you use the same order when you call the program.
 
 
 4.	What do we expect Stata to do when we provide these arguments to it? This recipe will form the body of the program. I’ve provided a specimen code for the putexcel command here but as mentioned below, this can be altered as needed. 
 
-tab treatment compliance if sub_population==“`Pop'", row matcell(cell) 
+`tab treatment compliance if sub_population==“`Pop'", row matcell(cell)`
 
-putexcel set `Filename', sheet("`Sheet'") `condition’  // condition is added as an argument here. When you call the program, specify if you want this condition to be replace or modify.
+`putexcel set `Filename', sheet("`Sheet'") `condition’`  
+Condition is added as an argument here. When you call the program, specify if you want this condition to be replace or modify.
 
-putexcel A`j'="`Heading'"
+`putexcel A`j'="`Heading'"`
 
-local ++j // this increases j by 1
+`local ++j` // this increases j by 1
 
-putexcel B`j'="Compliance Type 1" C`j’="Compliance Type 2” // export all the column names as needed. You can also save them in a local instead of typing them.
+`putexcel B`j'="Compliance Type 1" C`j’="Compliance Type 2”` // export all the column names as needed. You can also save them in a local instead of typing them.
 
-local ++j
+`local ++j`
 
-putexcel A`j' = “Treatment Group 1”  // export all the row-names as needed.
+`putexcel A`j' = “Treatment Group 1”`  // export all the row-names as needed.
 
-putexcel B`j' = cell[1,1] 
-putexcel C`j’ = cell[1,2]  // export all the cells as needed
+`putexcel B`j' = cell[1,1]` 
+`putexcel C`j’ = cell[1,2]`  // export all the cells as needed
 
-local j = `j’+3 // increase j by more than 3 if the table is large
+`local j = `j’+3` // increase j by more than 3 if the table is large
 
-putexcel A`j'="`Note'" 
+`putexcel A`j'="`Note'"`
 
 
 5.	After writing the body of the program we will tell Stata that the program’s job is over and it can now be ended. 
 
-end 
-
+`end`
 
 
 Now, in order to tabulate treatment group and compliance for a particular sub-population and export the results, we can just call the program and give values to the arguments
@@ -66,15 +66,14 @@ Now, in order to tabulate treatment group and compliance for a particular sub-po
 Suppose we want the tabulate results for sub-populations A and B on the first sheet in the same excel file (with a sufficient gap between them) but results for sub-population C on, let’s say, the seventh sheet of a different excel file. The program can be called as follows-  
 
 
-our_program A first_file 1 "Sub Population A" "These are tabulation results of treatment groups and compliance levels for sub-population A. These look okay.” 1 replace
-
-our_program B first_file 1 “Sub Population B” “These are tabulation results of treatment groups and compliance levels for sub-population B. These look okay as well!” 6 modify
+`our_program A first_file 1 "Sub Population A" "These are tabulation results of treatment groups and compliance levels for sub-population A. These look okay.” 1 replace` 
+`our_program B first_file 1 “Sub Population B” “These are tabulation results of treatment groups and compliance levels for sub-population B. These look okay as well!” 6 modify`
 
 
 The choices 1 and 6 are arbitrary here- they depend on what we want our excel sheet to look like. We’d want there to be some gap between the two tables so the choice of j should reflect that. 
 
 
-our_program C second_file 7 “Sub Population C” “Here, treatment group and compliance levels have been tabulated for sub population C.” 1 replace
+`our_program C second_file 7 “Sub Population C” “Here, treatment group and compliance levels have been tabulated for sub population C.” 1 replace`
 
 
 Notice how a loop wouldn’t be easily able to take care of such complications. We have written just about fifteen lines of code in the program and can call it to tabulate variables and export tables to different excel files with different headings, different notes and any other differences we wish to add! For instance, we can even add the arguments variable1 and variable2 and then use the program to tabulate any two variables and export the results. 
