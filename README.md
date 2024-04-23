@@ -33,28 +33,25 @@ The order in which the arguments are listed doesn’t matter except that you wil
 
 4.	What do we expect Stata to do when we provide these arguments to it? This recipe will form the body of the program. I’ve provided a specimen code for the putexcel command here but as mentioned below, this can be altered as needed. 
 
-`tab treatment compliance if sub_population==“`Pop'", row matcell(cell)`
-
-`putexcel set `Filename', sheet("`Sheet'") `condition’`  
+```
+tab treatment compliance if sub_population==“`Pop'", row matcell(cell)
+```
+```
+putexcel set `Filename', sheet("`Sheet'") `condition’
+```  
 Condition is added as an argument here. When you call the program, specify if you want this condition to be replace or modify.
 
-`putexcel A`j'="`Heading'"`
-
-`local ++j` // this increases j by 1
-
-`putexcel B`j'="Compliance Type 1" C`j’="Compliance Type 2”` // export all the column names as needed. You can also save them in a local instead of typing them.
-
-`local ++j`
-
-`putexcel A`j' = “Treatment Group 1”`  // export all the row-names as needed.
-
-`putexcel B`j' = cell[1,1]` 
-`putexcel C`j’ = cell[1,2]`  // export all the cells as needed
-
-`local j = `j’+3` // increase j by more than 3 if the table is large
-
-`putexcel A`j'="`Note'"`
-
+```
+putexcel A`j'="`Heading'"
+local ++j // this increases j by 1
+putexcel B`j'="Compliance Type 1" C`j’="Compliance Type 2” // export all the column names as needed. You can also save them in a local instead of typing them.
+local ++j
+putexcel A`j' = “Treatment Group 1”  // export all the row-names as needed.
+putexcel B`j' = cell[1,1] 
+putexcel C`j’ = cell[1,2]  // export all the cells as needed
+local j = `j’+3 // increase j by more than 3 if the table is large
+putexcel A`j'="`Note'"
+```
 
 5.	After writing the body of the program we will tell Stata that the program’s job is over and it can now be ended. 
 
